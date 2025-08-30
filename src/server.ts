@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import buildApp from './app.js';
 
 const start = async (): Promise<void> => {

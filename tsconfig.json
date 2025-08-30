@@ -24,10 +24,16 @@
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@plugins/*": ["src/plugins/*"],
+      "@models/*": ["src/models/*"]
+    }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules",

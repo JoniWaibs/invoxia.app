@@ -3,9 +3,9 @@ import type {
   PluginConfig,
   PluginRegistry,
   PluginRegistrationResult,
-} from '../models/plugins';
+} from '@models/plugins';
 
-export class PluginRegistrar {
+export class PluginRegister {
   private fastify: FastifyInstance;
   private currentEnv: string;
 

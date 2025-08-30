@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { registerAllPlugins } from './plugins';
+import { registerAllPlugins } from '@plugins/utils';
 
 const buildApp = async (): Promise<FastifyInstance> => {
   const fastify = Fastify({

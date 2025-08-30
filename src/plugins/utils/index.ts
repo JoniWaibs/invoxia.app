@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
-import { PluginRegistrar } from './registry';
-import { securityPlugins } from './security';
-import type { PluginRegistrationResult } from '../models/plugins';
+import { PluginRegister } from '@plugins/registry';
+import { securityPlugins } from '@plugins/security';
+import type { PluginRegistrationResult } from '@models/plugins';
 
 export const allPlugins = [
   ...securityPlugins,
@@ -15,6 +15,6 @@ export const allPlugins = [
 export async function registerAllPlugins(
   fastify: FastifyInstance
 ): Promise<PluginRegistrationResult> {
-  const register = new PluginRegistrar(fastify);
+  const register = new PluginRegister(fastify);
   return await register.registerPlugins(allPlugins);
 }

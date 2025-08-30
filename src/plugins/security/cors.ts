@@ -1,5 +1,5 @@
 import cors from '@fastify/cors';
-import type { PluginConfig } from '../../models/plugins';
+import type { PluginConfig } from '@models/plugins';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === 'production';
