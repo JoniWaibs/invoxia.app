@@ -22,7 +22,6 @@
     "db:migrate:deploy": "prisma migrate deploy --schema=db/schema.prisma",
     "db:push": "prisma db push --schema=db/schema.prisma",
     "db:studio": "prisma studio --schema=db/schema.prisma",
-    "postinstall": "npm run db:generate",
     "services:start": "docker-compose up -d",
     "services:stop": "docker-compose down",
     "services:clean": "docker-compose down -v --remove-orphans",
