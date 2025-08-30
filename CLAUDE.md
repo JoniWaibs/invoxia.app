@@ -50,7 +50,7 @@ This is a **multi-tenant electronic invoicing system** for AFIP (Argentina's tax
 
 ## Technical Configuration
 
-- **Node.js**: Requires v23.0.0+
+- **Node.js**: Requires v22.0.0+
 - **TypeScript**: Strict mode enabled with ES2022 target
 - **Module System**: ES modules (type: "module")
 - **Test Framework**: Jest with ts-jest preset for ES modules
