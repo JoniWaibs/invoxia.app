@@ -1,5 +1,5 @@
 import helmet from '@fastify/helmet';
-import type { PluginConfig } from '../../models/plugins';
+import type { PluginConfig } from '@models/plugins';
 
 export const helmetPlugin: PluginConfig = {
   name: 'helmet',
