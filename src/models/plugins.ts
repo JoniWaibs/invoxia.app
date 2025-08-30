@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 
 export interface PluginConfig {
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plugin: any;
   options?: FastifyPluginOptions;
   enabled?: boolean;
@@ -16,4 +17,6 @@ export interface PluginRegistrationResult {
   errors: Array<{ plugin: string; error: string }>;
 }
 
-export type PluginRegistrar = (fastify: FastifyInstance) => Promise<PluginRegistrationResult>;
+export type PluginRegistrar = (
+  fastify: FastifyInstance
+) => Promise<PluginRegistrationResult>;

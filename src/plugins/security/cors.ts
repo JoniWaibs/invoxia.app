@@ -10,24 +10,24 @@ export const corsPlugin: PluginConfig = {
   enabled: true,
   environments: ['development', 'production', 'test'],
   options: {
-    origin: isDevelopment 
+    origin: isDevelopment
       ? true
       : isProduction
-      ? [
-          'https://your-domain.com',
-          'https://www.your-domain.com',
-          /\.railway\.app$/,
-        ]
-      : false,
+        ? [
+            'https://your-domain.com',
+            'https://www.your-domain.com',
+            /\.railway\.app$/,
+          ]
+        : false,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: [
       'Origin',
-      'X-Requested-With', 
+      'X-Requested-With',
       'Content-Type',
       'Accept',
       'Authorization',
       'Cache-Control',
-      'X-API-Key'
+      'X-API-Key',
     ],
     credentials: true,
     maxAge: 86400,

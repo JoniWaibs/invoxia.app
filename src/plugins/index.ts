@@ -12,7 +12,9 @@ export const allPlugins = [
   // ...monitoringPlugins,
 ];
 
-export async function registerAllPlugins(fastify: FastifyInstance): Promise<PluginRegistrationResult> {
+export async function registerAllPlugins(
+  fastify: FastifyInstance
+): Promise<PluginRegistrationResult> {
   const register = new PluginRegistrar(fastify);
   return await register.registerPlugins(allPlugins);
 }

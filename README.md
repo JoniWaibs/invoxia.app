@@ -23,7 +23,7 @@ Sistema de facturación electrónica multi-tenant para AFIP que permite emitir l
 ## 🏗️ Desarrollo Local
 
 ### Requisitos Previos
-- Node.js 23+
+- Node.js 22+
 - Docker & Docker Compose
 - Git
 
@@ -219,7 +219,7 @@ En producción se utiliza el `Dockerfile` completo que:
 #### Dockerfile Características
 
 ```dockerfile
-FROM node:23-alpine                    # Base ligera
+FROM node:22-alpine                    # Base ligera
 COPY package*.json ./                  # Cache de dependencias
 RUN npm ci --only=production          # Solo deps de producción
 COPY . .                              # Código fuente

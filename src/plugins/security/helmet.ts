@@ -20,15 +20,18 @@ export const helmetPlugin: PluginConfig = {
         frameSrc: ["'none'"],
       },
     },
-    hsts: process.env.NODE_ENV === 'production' ? {
-      maxAge: 31536000,
-      includeSubDomains: true,
-      preload: true,
-    } : false,
+    hsts:
+      process.env.NODE_ENV === 'production'
+        ? {
+            maxAge: 31536000,
+            includeSubDomains: true,
+            preload: true,
+          }
+        : false,
     hidePoweredBy: true,
     xssFilter: true,
     noSniff: true,
     frameguard: { action: 'deny' },
-    referrerPolicy: { policy: 'same-origin' }
+    referrerPolicy: { policy: 'same-origin' },
   },
 };
