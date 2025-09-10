@@ -17,7 +17,7 @@ export interface ErrorResponse {
 }
 
 export interface WhatsAppErrorResponse {
-  message: string; // User-friendly message for WhatsApp
+  message: string;
 }
 
 const errorHandler = async (
@@ -37,7 +37,6 @@ const errorHandler = async (
   if (error instanceof BaseError) {
     appError = error;
   } else {
-    // Handle Zod validation errors
     if (error.name === 'ZodError') {
       appError = new ValidationError(
         `Validation failed: ${error.message}`,

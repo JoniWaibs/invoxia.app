@@ -58,7 +58,6 @@ export function createValidationHandler(
   };
 }
 
-// Plugin to add validation helpers to Fastify instance
 const validationPlugin = async (fastify: FastifyInstance) => {
   fastify.decorate('validate', createValidationHandler);
 };
