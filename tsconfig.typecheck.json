@@ -7,7 +7,10 @@
     "paths": {
       "@plugins/*": ["src/plugins/*"],
       "@models/*": ["src/models/*"],
-      "@shared/*": ["src/shared/*"]
+      "@shared/*": ["src/shared/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@services/*": ["src/services/*"],
+      "@routes/*": ["src/routes/*"]
     }
   },
   "include": [

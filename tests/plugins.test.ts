@@ -12,7 +12,7 @@ describe('Plugins', () => {
     it('should contain security plugins', () => {
       expect(allPlugins).toContain(corsPlugin);
       expect(allPlugins).toContain(helmetPlugin);
-      expect(allPlugins).toHaveLength(6); // jwt + auth + errorHandler + validation + cors + helmet
+      expect(allPlugins).toHaveLength(5); // jwt + auth + errorHandler + cors + helmet
     });
 
     it('should have valid plugin configurations', () => {
@@ -38,7 +38,6 @@ describe('Plugins', () => {
         'jwt',
         'auth',
         'errorHandler',
-        'validation',
         'cors',
         'helmet',
       ]);
