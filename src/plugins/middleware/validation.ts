@@ -1,5 +1,4 @@
 import type {
-  FastifyInstance,
   FastifyRequest,
   FastifyReply,
   preHandlerHookHandler,
@@ -7,7 +6,6 @@ import type {
 import { ZodSchema, ZodError } from 'zod';
 import { ValidationError } from '@shared/errors';
 import { v4 as uuidv4 } from 'uuid';
-import type { PluginConfig } from '@models/plugins';
 import { $ZodIssue } from 'zod/v4/core';
 
 export interface ValidationOptions {
@@ -56,21 +54,4 @@ export function createValidationHandler(
       throw error;
     }
   };
-}
-
-const validationPlugin = async (fastify: FastifyInstance) => {
-  fastify.decorate('validate', createValidationHandler);
-};
-
-export const validationPluginConfig: PluginConfig = {
-  name: 'validation',
-  plugin: validationPlugin,
-  enabled: true,
-  environments: ['development', 'production', 'test'],
-};
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    validate: typeof createValidationHandler;
-  }
 }

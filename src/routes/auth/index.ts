@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { AuthService } from '@services/AuthService';
-import { authValidation } from '@shared/validations/auth';
+import { authValidation } from '@shared/validations/auth/index.js';
 import { ConflictError, NotFoundError } from '@shared/errors';
 import type { JWTPayload } from '@plugins/auth/jwt';
 import { createValidationHandler } from '@plugins/middleware/validation';
@@ -27,7 +27,7 @@ async function authRoutes(fastify: FastifyInstance) {
       const { email, password, tenantName, whatsappNumber } = request.body;
 
       const existingTenant = await authService.findTenantByName(tenantName);
-      console.log('existingTenant', existingTenant);
+
       if (existingTenant) {
         throw new ConflictError(`Firma "${tenantName}" already exists`);
       }

@@ -25,7 +25,6 @@ const buildApp = async (): Promise<FastifyInstance> => {
 
   await registerAllPlugins(fastify);
 
-
   appRoutes.forEach((route: { prefix: string; route: FastifyPluginAsync }) => {
     fastify.register(route.route, { prefix: route.prefix });
   });
