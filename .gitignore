@@ -10,9 +10,9 @@ build/
 # Environment variables
 .env
 .env.local
-.env.development.local
+.env.development
 .env.test.local
-.env.production.local
+.env.production
 
 # Logs
 logs
@@ -103,3 +103,23 @@ out/
 
 # Railway
 .railway/
+
+# TypeScript
+*.tsbuildinfo
+.tscache/
+
+# Auto-generated files
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+
+# Test output
+test-results/
+junit.xml
+
+# Process managers
+.pm2/
+
+# Route testing artifacts
+src/routes/**/*.test.js
+src/routes/**/*.test.js.map

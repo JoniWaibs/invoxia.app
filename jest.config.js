@@ -3,9 +3,19 @@ export default {
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^@plugins/(.*)\\.js$': '<rootDir>/src/plugins/$1',
     '^@plugins/(.*)$': '<rootDir>/src/plugins/$1',
+    '^@models/(.*)\\.js$': '<rootDir>/src/models/$1',
     '^@models/(.*)$': '<rootDir>/src/models/$1',
+    '^@shared/(.*)\\.js$': '<rootDir>/src/shared/$1',
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@routes/(.*)\\.js$': '<rootDir>/src/routes/$1',
+    '^@routes/(.*)$': '<rootDir>/src/routes/$1',
+    '^@repositories/(.*)\\.js$': '<rootDir>/src/repositories/$1',
+    '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
+    '^@services/(.*)\\.js$': '<rootDir>/src/services/$1',
+    '^@services/(.*)$': '<rootDir>/src/services/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {

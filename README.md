@@ -246,6 +246,25 @@ NODE_ENV=production
 # + variables específicas de la aplicación
 ```
 
+## 🏗️ Arquitectura del Proyecto
+
+### Clean Architecture (Hibrida y simplificada para MVP)
+
+- **Capa de Dominio**: Entidades principales (User, Tenant/Firma, Session)
+- **Capa de Servicio**: Lógica de negocio (handlers de WhatsApp, integración AFIP)
+- **Capa de Infraestructura**: Base de datos, APIs externas
+- **Capa de Presentación**: Rutas Fastify + middleware
+
+### Conceptos Clave
+
+- **Firma** (de cara al usuario) = **Tenant** (base de datos/código)
+- **Máquina de Estados WhatsApp** para sesiones de usuario
+- **Parser de Comandos** para mensajes de WhatsApp
+- **Manejo Global de Errores** con clases de errores personalizadas
+- **Validación Zod** para todas las entradas
+
+*Posteriormente continuaremos agregando más información en esta sección*
+
 ## 🔄 Flujo de Facturación
 
 1. **Batch Preview**: Subir CSV/XLSX → generar borradores
