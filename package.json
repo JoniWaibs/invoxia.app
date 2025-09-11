@@ -7,7 +7,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "tsc && tsc-alias && node scripts/fix-imports.js",
+    "build": "npm run db:generate && tsc && tsc-alias && node scripts/fix-imports.js",
     "typecheck": "tsc -p tsconfig.typecheck.json",
     "start": "node dist/server.js",
     "dev": "tsx --tsconfig ./tsconfig.json src/server.ts",
