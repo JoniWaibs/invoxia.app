@@ -15,6 +15,8 @@ export default {
     '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
     '^@services/(.*)\\.js$': '<rootDir>/src/services/$1',
     '^@services/(.*)$': '<rootDir>/src/services/$1',
+    '^@prisma/(.*)\\.js$': '<rootDir>/generated/prisma/$1',
+    '^@prisma/(.*)$': '<rootDir>/generated/prisma/$1',
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
