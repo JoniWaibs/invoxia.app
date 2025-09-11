@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { AuthService } from '@services/AuthService';
-import { authValidation } from '@shared/validations/auth/index.js';
+import { authValidation } from '@shared/validations/auth/';
 import { ConflictError, NotFoundError } from '@shared/errors';
 import type { JWTPayload } from '@plugins/auth/jwt';
 import { createValidationHandler } from '@plugins/middleware/validation';

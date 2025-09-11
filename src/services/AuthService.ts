@@ -7,7 +7,7 @@ import {
   ConflictError,
   NotFoundError,
 } from '@shared/errors';
-import type { User, Tenant } from '../../generated/prisma/index.js';
+import type { User, Tenant } from '@prisma/index';
 
 export interface SignupResult {
   user: User;

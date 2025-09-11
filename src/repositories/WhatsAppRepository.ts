@@ -2,7 +2,7 @@ import type {
   WhatsAppSession,
   WhatsAppIncoming,
   SessionState,
-} from '../../generated/prisma/index.js';
+} from '@prisma/index';
 import { BaseRepository } from './BaseRepository';
 
 export class WhatsAppSessionRepository extends BaseRepository {
