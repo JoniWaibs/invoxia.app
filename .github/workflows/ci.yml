@@ -32,6 +32,12 @@ jobs:
       - name: Check code formatting
         run: npm run format:check
 
+      - name: Generate the Prisma client to ./generated/prisma
+        run: npx prisma generate
+
+      - name: Sanity check to help debug path issues
+        run: ls -R generated || true
+
       - name: Run type checking
         run: npm run typecheck
 
