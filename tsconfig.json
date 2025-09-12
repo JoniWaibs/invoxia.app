@@ -32,13 +32,11 @@
       "@shared/*": ["src/shared/*"],
       "@repositories/*": ["src/repositories/*"],
       "@services/*": ["src/services/*"],
-      "@routes/*": ["src/routes/*"],
-      "@generated/*": ["generated/*"]
+      "@routes/*": ["src/routes/*"]
     }
   },
   "include": [
-    "src/**/*",
-    "generated/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

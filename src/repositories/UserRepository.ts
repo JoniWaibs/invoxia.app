@@ -1,4 +1,4 @@
-import type { User, UserRole } from '@generated/prisma';
+import type { User, UserRole } from '@prisma/client';
 import { BaseRepository } from './BaseRepository';
 
 export class UserRepository extends BaseRepository {
