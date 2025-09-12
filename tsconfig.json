@@ -33,11 +33,12 @@
       "@repositories/*": ["src/repositories/*"],
       "@services/*": ["src/services/*"],
       "@routes/*": ["src/routes/*"],
-      "@prisma/*": ["generated/prisma/*"]
+      "@generated/*": ["generated/*"]
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "generated/**/*"
   ],
   "exclude": [
     "node_modules",

@@ -15,20 +15,19 @@ export default {
     '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
     '^@services/(.*)\\.js$': '<rootDir>/src/services/$1',
     '^@services/(.*)$': '<rootDir>/src/services/$1',
-    '^@prisma/(.*)\\.js$': '<rootDir>/generated/prisma/$1',
-    '^@prisma/(.*)$': '<rootDir>/generated/prisma/$1',
+    '^@generated/(.*)$': '<rootDir>/generated/$1',
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
-      useESM: true,
-    }],
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
   testMatch: ['**/tests/**/*.test.ts'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
 };

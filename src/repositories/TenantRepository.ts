@@ -1,4 +1,4 @@
-import type { Tenant, AFIPCondition } from '@prisma/index';
+import type { Tenant, AFIPCondition } from '@generated/prisma';
 import { BaseRepository } from './BaseRepository';
 
 export class TenantRepository extends BaseRepository {
