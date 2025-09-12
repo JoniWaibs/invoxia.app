@@ -1,3 +1,6 @@
+process.env.JWT_SECRET = 'test-secret-key';
+process.env.JWT_EXPIRES_IN = '1h';
+
 import { allPlugins, registerAllPlugins } from '@plugins/utils';
 import { corsPlugin } from '@plugins/security/cors';
 import { helmetPlugin } from '@plugins/security/helmet';
@@ -9,7 +12,7 @@ describe('Plugins', () => {
     it('should contain security plugins', () => {
       expect(allPlugins).toContain(corsPlugin);
       expect(allPlugins).toContain(helmetPlugin);
-      expect(allPlugins).toHaveLength(2);
+      expect(allPlugins).toHaveLength(5); // jwt + auth + errorHandler + cors + helmet
     });
 
     it('should have valid plugin configurations', () => {
@@ -31,7 +34,13 @@ describe('Plugins', () => {
 
       const result = await registerAllPlugins(fastify);
 
-      expect(result.registered).toEqual(['cors', 'helmet']);
+      expect(result.registered).toEqual([
+        'jwt',
+        'auth',
+        'errorHandler',
+        'cors',
+        'helmet',
+      ]);
       expect(result.skipped).toEqual([]);
       expect(result.errors).toEqual([]);
 

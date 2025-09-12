@@ -1,6 +1,22 @@
 import Fastify from 'fastify';
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import dotenv from 'dotenv';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { registerAllPlugins } from '@plugins/utils';
+import authRoutes from '@routes/auth';
+import healthRoutes from '@routes/health';
+
+dotenv.config();
+
+const appRoutes = [
+  {
+    prefix: '/api/auth',
+    route: authRoutes,
+  },
+  {
+    prefix: '/api/health',
+    route: healthRoutes,
+  },
+];
 
 const buildApp = async (): Promise<FastifyInstance> => {
   const fastify = Fastify({
@@ -9,9 +25,22 @@ const buildApp = async (): Promise<FastifyInstance> => {
 
   await registerAllPlugins(fastify);
 
-  fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
-    request.log.info('Root endpoint accessed');
-    return reply.send({ message: 'Hello, Fastify with TypeScript!' });
+  // Test endpoint for JWT validation (doesn't require database)
+  fastify.get(
+    '/test-jwt',
+    {
+      preHandler: [fastify.authenticate],
+    },
+    async (request, reply) => {
+      return reply.send({
+        message: 'JWT token is valid',
+        user: request.user,
+      });
+    }
+  );
+
+  appRoutes.forEach((route: { prefix: string; route: FastifyPluginAsync }) => {
+    fastify.register(route.route, { prefix: route.prefix });
   });
 
   return fastify;

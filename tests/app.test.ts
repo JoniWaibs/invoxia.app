@@ -8,10 +8,11 @@ describe('App', () => {
     await app.ready();
 
     try {
-      const response = await request(app.server).get('/').expect(200);
+      const response = await request(app.server).get('/api/health').expect(200);
 
-      expect(response.body).toEqual({
-        message: 'Hello, Fastify with TypeScript!',
+      expect(response.body).toMatchObject({
+        message: 'Invoxia API - MVP Facturador Multi-Tenant',
+        status: 'ok',
       });
     } finally {
       await app.close();
