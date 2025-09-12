@@ -1,18 +1,8 @@
-process.env.JWT_SECRET = 'test-secret-key';
-process.env.JWT_EXPIRES_IN = '1h';
-
-import { describe, it, expect, afterAll } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import request from 'supertest';
 import buildApp from '../src/app';
 
 describe('JWT Authentication', () => {
-  const originalSecret = process.env.JWT_SECRET;
-  const originalExpires = process.env.JWT_EXPIRES_IN;
-
-  afterAll(() => {
-    process.env.JWT_SECRET = originalSecret;
-    process.env.JWT_EXPIRES_IN = originalExpires;
-  });
 
   it('should generate and verify JWT token correctly', async () => {
     const app = await buildApp();
@@ -30,12 +20,16 @@ describe('JWT Authentication', () => {
       expect(typeof token).toBe('string');
       expect(token.length).toBeGreaterThan(0);
 
+      // Test JWT validation using a simple test endpoint that doesn't hit the database
       const response = await request(app.server)
-        .get('/api/auth/profile')
+        .get('/test-jwt')
         .set('Authorization', `Bearer ${token}`)
-        .expect(404); // Expect 404 because user doesn't exist in DB, but auth should work
+        .expect(200);
 
-      expect(response.body.error).toBe('Not Found');
+      // Verify that JWT contains our test data
+      expect(response.body.user.userId).toBe('test-user-id');
+      expect(response.body.user.tenantId).toBe('test-tenant-id');
+      expect(response.body.user.email).toBe('test@example.com');
     } finally {
       await app.close();
     }
@@ -74,21 +68,6 @@ describe('JWT Authentication', () => {
 
   it('should extract user data from JWT token in request.user', async () => {
     const app = await buildApp();
-
-    app.get(
-      '/test-jwt',
-      {
-        preHandler: [app.authenticate],
-      },
-      async (request, reply) => {
-        return reply.send({
-          message: 'JWT data extracted successfully',
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          user: (request as any).user,
-        });
-      }
-    );
-
     await app.ready();
 
     try {
@@ -105,7 +84,7 @@ describe('JWT Authentication', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
-      expect(response.body.message).toBe('JWT data extracted successfully');
+      expect(response.body.message).toBe('JWT token is valid');
       expect(response.body.user).toBeDefined();
       expect(response.body.user.userId).toBe('test-user-123');
       expect(response.body.user.tenantId).toBe('test-tenant-456');
