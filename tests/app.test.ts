@@ -3,7 +3,6 @@ import request from 'supertest';
 import buildApp from '../src/app';
 
 describe('App', () => {
-
   it('should return a greeting message', async () => {
     const app = await buildApp();
     await app.ready();

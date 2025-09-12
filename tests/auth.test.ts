@@ -3,7 +3,6 @@ import request from 'supertest';
 import buildApp from '../src/app';
 
 describe('JWT Authentication', () => {
-
   it('should generate and verify JWT token correctly', async () => {
     const app = await buildApp();
     await app.ready();

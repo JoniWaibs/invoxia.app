@@ -26,14 +26,18 @@ const buildApp = async (): Promise<FastifyInstance> => {
   await registerAllPlugins(fastify);
 
   // Test endpoint for JWT validation (doesn't require database)
-  fastify.get('/test-jwt', {
-    preHandler: [fastify.authenticate]
-  }, async (request, reply) => {
-    return reply.send({
-      message: 'JWT token is valid',
-      user: request.user
-    });
-  });
+  fastify.get(
+    '/test-jwt',
+    {
+      preHandler: [fastify.authenticate],
+    },
+    async (request, reply) => {
+      return reply.send({
+        message: 'JWT token is valid',
+        user: request.user,
+      });
+    }
+  );
 
   appRoutes.forEach((route: { prefix: string; route: FastifyPluginAsync }) => {
     fastify.register(route.route, { prefix: route.prefix });
