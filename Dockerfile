@@ -25,9 +25,10 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-# Remove development dependencies and source files
-RUN rm -rf src tests node_modules && \
-    npm ci --only=production --ignore-scripts && \
+# Remove development dependencies but preserve Prisma client
+RUN rm -rf src tests && \
+    npm ci --only=production && \
+    npx prisma generate --schema=db/schema.prisma && \
     npm cache clean --force
 
 # Create non-root user
