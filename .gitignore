@@ -22,6 +22,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# guides
+GUIDES.md
+
 # Runtime data
 pids
 *.pid
