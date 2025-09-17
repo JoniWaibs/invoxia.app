@@ -30,6 +30,9 @@
     "services:logs": "docker-compose logs -f",
     "services:restart": "docker-compose restart"
   },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "keywords": [],
   "author": "Jonatan Waibsnaider",
   "license": "ISC",
