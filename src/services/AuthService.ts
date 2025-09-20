@@ -35,6 +35,12 @@ export class AuthService extends BaseService {
     tenantName: string;
     whatsappNumber?: string;
   }): Promise<SignupResult> {
+    const existingTenant = await this.tenantRepo.findByName(data.tenantName);
+
+    if (existingTenant) {
+      throw new ConflictError(`Firma ${existingTenant.name.toString()} already exists`);
+    }
+  
     if (data.email) {
       const existingUser = await this.userRepo.findByEmail(data.email);
       if (existingUser) {
@@ -42,9 +48,13 @@ export class AuthService extends BaseService {
       }
     }
 
-    const existingTenant = await this.tenantRepo.findByName(data.tenantName);
-    if (existingTenant) {
-      throw new ConflictError(`Firma "${existingTenant.name}" already exists`);
+    if (data.whatsappNumber) {
+      const existingUser = await this.userRepo.findByWhatsApp(
+        data.whatsappNumber
+      );
+      if (existingUser) {
+        throw new ConflictError('WhatsApp number is already registered');
+      }
     }
 
     let hashedPassword: string | undefined;
@@ -171,10 +181,11 @@ export class AuthService extends BaseService {
     return this.userRepo.findByWhatsApp(whatsappNumber);
   }
 
-  async getUserProfile(userId: string): Promise<AuthenticatedUser | null> {
+  async getUserProfile(userId: string): Promise<AuthenticatedUser> {
     const user = await this.userRepo.findById(userId);
+
     if (!user) {
-      return null;
+      throw new NotFoundError('User not found');
     }
 
     return {

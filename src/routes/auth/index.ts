@@ -1,7 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { AuthService } from '@services/AuthService';
 import { authValidation } from '@shared/validations/auth/';
-import { ConflictError, NotFoundError } from '@shared/errors';
 import type { JWTPayload } from '@plugins/auth/jwt';
 import { createValidationHandler } from '@plugins/middleware/validation';
 import type {
@@ -25,27 +24,6 @@ async function authRoutes(fastify: FastifyInstance) {
     },
     async (request, reply) => {
       const { email, password, tenantName, whatsappNumber } = request.body;
-
-      const existingTenant = await authService.findTenantByName(tenantName);
-
-      if (existingTenant) {
-        throw new ConflictError(`Firma "${tenantName}" already exists`);
-      }
-
-      if (email) {
-        const existingUser = await authService.findUserByEmail(email);
-        if (existingUser) {
-          throw new ConflictError('Email is already registered');
-        }
-      }
-
-      if (whatsappNumber) {
-        const existingUser =
-          await authService.findUserByWhatsApp(whatsappNumber);
-        if (existingUser) {
-          throw new ConflictError('WhatsApp number is already registered');
-        }
-      }
 
       const result = await authService.signup({
         ...(email && { email }),
@@ -125,10 +103,6 @@ async function authRoutes(fastify: FastifyInstance) {
       const { userId } = request.user as JWTPayload;
 
       const result = await authService.getUserProfile(userId);
-
-      if (!result) {
-        throw new NotFoundError('User not found');
-      }
 
       return reply.send({
         message: 'Profile retrieved successfully',

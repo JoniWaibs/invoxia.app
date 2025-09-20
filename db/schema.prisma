@@ -110,15 +110,3 @@ model WhatsAppIncoming {
 
   @@map("wa_incoming")
 }
-
-// Health check model (keep existing)
-model Health {
-  id        Int      @id @default(autoincrement())
-  status    String   @default("ok")
-  message   String?
-  timestamp DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("health")
-}
