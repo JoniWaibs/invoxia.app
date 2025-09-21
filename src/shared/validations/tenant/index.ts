@@ -1,17 +1,18 @@
 import { z } from 'zod';
-import { cuitSchema, puntoVentaSchema } from '@shared/validations/common';
+import {
+  cuitSchema,
+  puntoVentaSchema,
+  tenantNameSchema,
+} from '@shared/validations/common';
 
-export const tenantNameSchema = z
-  .string()
-  .min(2, 'Tenant name must be at least 2 characters')
-  .max(100, 'Tenant name cannot exceed 100 characters');
+export const certificatePath = z.string().optional();
 
 export const createTenantSchema = z.object({
   name: tenantNameSchema,
 });
 
 export const updateTenantNameSchema = z.object({
-  name: z.string().min(2).max(100).trim(),
+  name: tenantNameSchema,
 });
 
 export const afipConditionSchema = z.enum([
@@ -24,6 +25,8 @@ export const afipConfigSchema = z.object({
   cuit: cuitSchema.optional(),
   puntoVenta: puntoVentaSchema.optional(),
   condition: afipConditionSchema.optional(),
+  certificatePath: z.string().optional(),
+  keyPath: z.string().optional(),
 });
 
 export const updateAfipCuitSchema = z.object({
@@ -37,3 +40,14 @@ export const updateAfipPuntoVentaSchema = z.object({
 export const updateAfipConditionSchema = z.object({
   condition: afipConditionSchema,
 });
+
+export const tenantValidation = {
+  update: {
+    schema: {
+      body: {
+        config: afipConfigSchema,
+      },
+    },
+  },
+  profile: {},
+};

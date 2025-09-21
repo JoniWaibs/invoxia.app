@@ -32,15 +32,25 @@ export class AuthService extends BaseService {
   async signup(data: {
     email?: string;
     password?: string;
-    tenantName: string;
+    newTenantName?: string;
+    existingTenantName?: string;
     whatsappNumber?: string;
   }): Promise<SignupResult> {
-    const existingTenant = await this.tenantRepo.findByName(data.tenantName);
+    const shouldCreateTenant = !!data.newTenantName;
+    const tenantName = data.newTenantName || data.existingTenantName!;
 
-    if (existingTenant) {
-      throw new ConflictError(`Firma ${existingTenant.name.toString()} already exists`);
+    const existingTenant = await this.tenantRepo.findByName(tenantName);
+
+    if (shouldCreateTenant && existingTenant) {
+      throw new ConflictError(`Firma ${existingTenant.name} already exists`);
     }
-  
+
+    if (!shouldCreateTenant && !existingTenant) {
+      throw new NotFoundError(
+        `Firma ${tenantName} not found, you should create one`
+      );
+    }
+
     if (data.email) {
       const existingUser = await this.userRepo.findByEmail(data.email);
       if (existingUser) {
@@ -63,18 +73,24 @@ export class AuthService extends BaseService {
     }
 
     return this.transaction(async (prisma) => {
-      const tenant = await prisma.tenant.create({
-        data: {
-          name: data.tenantName,
-        },
-      });
+      let tenant: Tenant;
+
+      if (shouldCreateTenant) {
+        tenant = await prisma.tenant.create({
+          data: {
+            name: tenantName,
+          },
+        });
+      } else {
+        tenant = existingTenant!;
+      }
 
       const user = await prisma.user.create({
         data: {
           ...(data.email && { email: data.email }),
           ...(hashedPassword && { password: hashedPassword }),
           whatsappNumber: data.whatsappNumber || '',
-          role: 'ADMIN',
+          role: shouldCreateTenant ? 'ADMIN' : 'USER',
           tenantId: tenant.id,
         },
         include: {
@@ -121,7 +137,6 @@ export class AuthService extends BaseService {
       throw new NotFoundError('User', userId);
     }
 
-    // Check if WhatsApp number is already in use in the same tenant
     const existingUser = await this.userRepo.findByWhatsAppAndTenant(
       whatsappNumber,
       user.tenantId

@@ -23,12 +23,13 @@ async function authRoutes(fastify: FastifyInstance) {
       ],
     },
     async (request, reply) => {
-      const { email, password, tenantName, whatsappNumber } = request.body;
+      const { email, password, newTenantName, existingTenantName, whatsappNumber } = request.body;
 
       const result = await authService.signup({
         ...(email && { email }),
         ...(password && { password }),
-        tenantName,
+        ...(newTenantName && { newTenantName }),
+        ...(existingTenantName && { existingTenantName }),
         ...(whatsappNumber && { whatsappNumber }),
       });
 
@@ -111,14 +112,10 @@ async function authRoutes(fastify: FastifyInstance) {
             id: result.user.id,
             email: result.user.email || 'unknown',
             whatsappNumber: result.user.whatsappNumber,
-            tenantId: result.user.tenantId,
           },
           tenant: {
             id: result.tenant.id,
             name: result.tenant.name,
-            afipCuit: result.tenant.afipCuit || 'unknown',
-            afipPv: result.tenant.afipPv || 0,
-            afipCondition: result.tenant.afipCondition || 'unknown',
           },
         },
       });
