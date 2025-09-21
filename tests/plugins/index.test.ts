@@ -1,6 +1,3 @@
-process.env.JWT_SECRET = 'test-secret-key';
-process.env.JWT_EXPIRES_IN = '1h';
-
 import { allPlugins, registerAllPlugins } from '@plugins/utils';
 import { corsPlugin } from '@plugins/security/cors';
 import { helmetPlugin } from '@plugins/security/helmet';

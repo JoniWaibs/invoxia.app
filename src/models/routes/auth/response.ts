@@ -4,7 +4,7 @@ export interface User {
   id: string;
   email?: string;
   whatsappNumber: string;
-  tenantId: string;
+  tenantId: Tenant['id'];
 }
 
 export interface Auth {
@@ -14,6 +14,6 @@ export interface Auth {
 }
 
 export interface Profile {
-  user: User;
-  tenant: Tenant;
+  user: Omit<User, 'tenantId'>;
+  tenant: Pick<Tenant, 'id' | 'name'>;
 }

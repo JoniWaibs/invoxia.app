@@ -13,10 +13,6 @@ export interface JWTPayload {
   exp?: number;
 }
 
-export interface AuthenticatedRequest extends FastifyRequest {
-  user: JWTPayload;
-}
-
 declare module 'fastify' {
   interface FastifyInstance {
     authenticate: (
@@ -27,6 +23,10 @@ declare module 'fastify' {
       payload: Pick<JWTPayload, 'userId' | 'tenantId' | 'email'>
     ) => string;
   }
+}
+
+export interface AuthenticatedRequest extends FastifyRequest {
+  user: JWTPayload;
 }
 
 const JWT_SECRET = process.env.JWT_SECRET;
