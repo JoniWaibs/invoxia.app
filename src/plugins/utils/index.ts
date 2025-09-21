@@ -10,8 +10,6 @@ export const allPlugins = [
   authPlugin,
   ...middlewarePlugins,
   ...securityPlugins,
-  // Add more plugin categories here as you expand:
-  // ...validationPlugins,
   // ...rateLimitPlugins,
   // ...monitoringPlugins,
 ];

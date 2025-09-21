@@ -27,7 +27,6 @@ const errorHandler = async (
 ) => {
   const requestId = request.headers['x-request-id'] as string;
 
-  // Set request ID if not present
   if (!requestId) {
     request.headers['x-request-id'] = uuidv4();
   }
