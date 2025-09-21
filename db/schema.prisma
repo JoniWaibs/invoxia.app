@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -11,12 +7,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Tenant {
+  id            String             @id @default(uuid())
+  name          String
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  afipCuit      String?
+  afipPv        Int?
+  afipCondition AFIPCondition?
+  afipCertPath  String?
+  afipKeyPath   String?
+  users         User[]
+  waIncoming    WhatsAppIncoming[]
+  waSessions    WhatsAppSession[]
+
+  @@map("tenants")
+}
+
+model User {
+  id             String             @id @default(uuid())
+  email          String?            @unique
+  password       String?
+  whatsappNumber String
+  role           UserRole           @default(USER)
+  tenantId       String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  waIncoming     WhatsAppIncoming[]
+  waSessions     WhatsAppSession?
+
+  @@unique([whatsappNumber, tenantId, email])
+  @@map("users")
+}
+
+model WhatsAppSession {
+  id        String       @id @default(uuid())
+  userId    String       @unique
+  tenantId  String
+  state     SessionState @default(IDLE)
+  batchId   String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  tenant    Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wa_sessions")
+}
+
+model WhatsAppIncoming {
+  id        String   @id @default(uuid())
+  userId    String?
+  tenantId  String?
+  messageId String   @unique
+  processed Boolean  @default(false)
+  payload   Json?
+  createdAt DateTime @default(now())
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@map("wa_incoming")
+}
+
+model health {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("ok")
+  message   String?
+  timestamp DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
 enum UserRole {
   ADMIN
   USER
 }
 
-// WhatsApp session states
 enum SessionState {
   IDLE
   AWAITING_TENANT_NAME
@@ -25,88 +91,8 @@ enum SessionState {
   AWAITING_AFIP_COND
 }
 
-// AFIP Tax Condition types
 enum AFIPCondition {
   MONOTRIBUTO
   RESPONSABLE_INSCRIPTO
   EXENTO
-}
-
-// Tenant represents a "Firma" in the business domain
-model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // AFIP Configuration
-  afipCuit      String?
-  afipPv        Int? // Punto de Venta
-  afipCondition AFIPCondition?
-  afipCertPath  String? // Path to certificate file
-  afipKeyPath   String? // Path to private key file
-
-  // Relations
-  users       User[]
-  waSessions  WhatsAppSession[]
-  waIncoming  WhatsAppIncoming[]
-
-  @@map("tenants")
-}
-
-// User can belong to multiple tenants, but has one primary tenant
-model User {
-  id              String   @id @default(uuid())
-  email           String?  @unique
-  password        String? // Hashed with Argon2
-  whatsappNumber  String
-  role            UserRole @default(USER)
-  tenantId        String // Primary tenant
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  waSessions     WhatsAppSession[]
-  waIncoming     WhatsAppIncoming[]
-
-  // Composite unique constraint: whatsappNumber and email per tenant
-  @@unique([whatsappNumber, tenantId, email])
-  @@map("users")
-}
-
-// WhatsApp Session for managing user conversation state (FSM)
-model WhatsAppSession {
-  id        String       @id @default(uuid())
-  userId    String
-  tenantId  String
-  state     SessionState @default(IDLE)
-  batchId   String? // For grouping related operations
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
-  // Relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  // One active session per user
-  @@unique([userId])
-  @@map("wa_sessions")
-}
-
-// WhatsApp Incoming messages for idempotency
-model WhatsAppIncoming {
-  id        String   @id @default(uuid())
-  userId    String?
-  tenantId  String?
-  messageId String   @unique // Meta's message ID for idempotency
-  processed Boolean  @default(false)
-  payload   Json?    // Store original webhook payload
-  createdAt DateTime @default(now())
-
-  // Relations
-  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-
-  @@map("wa_incoming")
 }
