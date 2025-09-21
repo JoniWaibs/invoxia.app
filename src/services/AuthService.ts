@@ -183,29 +183,4 @@ export class AuthService extends BaseService {
     const hashedNewPassword = await argon2.hash(newPassword);
     await this.userRepo.updatePassword(userId, hashedNewPassword);
   }
-
-  async findTenantByName(name: string): Promise<Tenant | null> {
-    return this.tenantRepo.findByName(name);
-  }
-
-  async findUserByEmail(email: string): Promise<User | null> {
-    return this.userRepo.findByEmail(email);
-  }
-
-  async findUserByWhatsApp(whatsappNumber: string): Promise<User | null> {
-    return this.userRepo.findByWhatsApp(whatsappNumber);
-  }
-
-  async getUserProfile(userId: string): Promise<AuthenticatedUser> {
-    const user = await this.userRepo.findById(userId);
-
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-
-    return {
-      user: user as User,
-      tenant: (user as unknown as AuthenticatedUser).tenant,
-    };
-  }
 }

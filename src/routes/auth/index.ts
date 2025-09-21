@@ -23,7 +23,13 @@ async function authRoutes(fastify: FastifyInstance) {
       ],
     },
     async (request, reply) => {
-      const { email, password, newTenantName, existingTenantName, whatsappNumber } = request.body;
+      const {
+        email,
+        password,
+        newTenantName,
+        existingTenantName,
+        whatsappNumber,
+      } = request.body;
 
       const result = await authService.signup({
         ...(email && { email }),
@@ -103,7 +109,7 @@ async function authRoutes(fastify: FastifyInstance) {
     async (request, reply) => {
       const { userId } = request.user as JWTPayload;
 
-      const result = await authService.getUserProfile(userId);
+      const result = await authService.getUserById(userId);
 
       return reply.send({
         message: 'Profile retrieved successfully',

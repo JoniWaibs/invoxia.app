@@ -17,18 +17,6 @@ export interface AuthenticatedRequest extends FastifyRequest {
   user: JWTPayload;
 }
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    authenticate: (
-      request: FastifyRequest,
-      reply: FastifyReply
-    ) => Promise<void>;
-    generateToken: (
-      payload: Pick<JWTPayload, 'userId' | 'tenantId' | 'email'>
-    ) => string;
-  }
-}
-
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 

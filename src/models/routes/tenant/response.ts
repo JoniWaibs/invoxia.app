@@ -1,8 +1,7 @@
 export interface Tenant {
-    id: string;
-    name: string;
-    afipCuit?: string;
-    afipPv?: number;
-    afipCondition?: string;
-  }
-  
+  id: string;
+  name: string;
+  afipCuit?: string;
+  afipPv?: number;
+  afipCondition?: string;
+}

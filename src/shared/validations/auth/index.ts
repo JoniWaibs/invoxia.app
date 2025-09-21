@@ -4,7 +4,7 @@ import {
   passwordSchema,
   phoneNumberSchema,
 } from '@shared/validations/common';
-import { tenantNameSchema } from '@shared/validations/tenant';
+import { tenantNameSchema } from '@shared/validations/common';
 
 export const signupSchema = z
   .object({
@@ -24,7 +24,7 @@ export const signupSchema = z
     },
     {
       message:
-        "Either 'newTenantName' or 'existingTenantName' must be provided, but not both",
+        'Either newTenantName or existingTenantName must be provided, but not both',
       path: ['tenantName'],
     }
   );

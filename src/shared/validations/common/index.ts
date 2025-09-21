@@ -26,3 +26,8 @@ export const cuitSchema = z
   .regex(/^\d{2}-\d{8}-\d{1}$/, 'CUIT must be in format XX-XXXXXXXX-X');
 
 export const puntoVentaSchema = z.number().int().min(1).max(9999);
+
+export const tenantNameSchema = z
+  .string()
+  .min(2, 'Tenant name must be at least 2 characters')
+  .max(100, 'Tenant name cannot exceed 100 characters');
