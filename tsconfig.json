@@ -37,7 +37,6 @@
   },
   "include": [
     "src/**/*",
-    "typings/**/*",
     "test"
   ],
   "exclude": [

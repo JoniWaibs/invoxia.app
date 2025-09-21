@@ -25,7 +25,7 @@ const buildApp = async (): Promise<FastifyInstance> => {
 
   await registerAllPlugins(fastify);
 
-  // Test endpoint for JWT validation (doesn't require database)
+  // For tests purpose
   fastify.get(
     '/test-jwt',
     {

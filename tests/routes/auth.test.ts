@@ -1,7 +1,11 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import request from 'supertest';
 import buildApp from '../../src/app';
-import { AuthService } from '../../src/services/AuthService';
+import {
+  AuthService,
+  type SignupResult,
+  type AuthenticatedUser,
+} from '@services/AuthService';
 import { mockUser, mockTenant } from '../mocks/auth.data';
 
 describe('api/auth route', () => {
@@ -80,10 +84,12 @@ describe('api/auth route', () => {
         const app = await buildApp();
         await app.ready();
 
-        const mockSignup = jest.fn().mockResolvedValue({
-          user: mockUser[0],
-          tenant: mockTenant,
-        });
+        const mockSignup = jest
+          .fn<() => Promise<SignupResult>>()
+          .mockResolvedValue({
+            user: mockUser[0]!,
+            tenant: mockTenant,
+          });
 
         jest
           .spyOn(AuthService.prototype, 'signup')
@@ -121,10 +127,12 @@ describe('api/auth route', () => {
         const app = await buildApp();
         await app.ready();
 
-        const mockSignup = jest.fn().mockResolvedValue({
-          user: mockUser[1],
-          tenant: mockTenant,
-        });
+        const mockSignup = jest
+          .fn<() => Promise<SignupResult>>()
+          .mockResolvedValue({
+            user: mockUser[1]!,
+            tenant: mockTenant,
+          });
 
         jest
           .spyOn(AuthService.prototype, 'signup')
@@ -182,10 +190,12 @@ describe('api/auth route', () => {
       const app = await buildApp();
       await app.ready();
 
-      const mockSignin = jest.fn().mockResolvedValue({
-        user: mockUser[0],
-        tenant: mockTenant,
-      });
+      const mockSignin = jest
+        .fn<() => Promise<AuthenticatedUser>>()
+        .mockResolvedValue({
+          user: mockUser[0]!,
+          tenant: mockTenant,
+        });
 
       jest
         .spyOn(AuthService.prototype, 'signin')
@@ -216,10 +226,12 @@ describe('api/auth route', () => {
       const app = await buildApp();
       await app.ready();
 
-      const mockSignin = jest.fn().mockResolvedValue({
-        user: mockUser[0],
-        tenant: mockTenant,
-      });
+      const mockSignin = jest
+        .fn<() => Promise<AuthenticatedUser>>()
+        .mockResolvedValue({
+          user: mockUser[0]!,
+          tenant: mockTenant,
+        });
 
       jest
         .spyOn(AuthService.prototype, 'signin')
@@ -248,10 +260,13 @@ describe('api/auth route', () => {
       const app = await buildApp();
       await app.ready();
 
-      const mockSignin = jest.fn().mockRejectedValue({
-        statusCode: 401,
-        message: 'Invalid credentials',
-      });
+      const mockSignin = jest
+        .fn<() => Promise<AuthenticatedUser>>()
+        .mockRejectedValue({
+          name: 'AuthenticationError',
+          message: 'Invalid credentials',
+          statusCode: 401,
+        });
 
       jest
         .spyOn(AuthService.prototype, 'signin')
@@ -276,10 +291,12 @@ describe('api/auth route', () => {
       const app = await buildApp();
       await app.ready();
 
-      const mockGetUserProfile = jest.fn().mockResolvedValue({
-        user: mockUser[0],
-        tenant: mockTenant,
-      });
+      const mockGetUserProfile = jest
+        .fn<() => Promise<AuthenticatedUser>>()
+        .mockResolvedValue({
+          user: mockUser[0]!,
+          tenant: mockTenant,
+        });
 
       jest
         .spyOn(AuthService.prototype, 'getUserById')
@@ -326,7 +343,9 @@ describe('api/auth route', () => {
       const app = await buildApp();
       await app.ready();
 
-      const mockChangePassword = jest.fn();
+      const mockChangePassword = jest
+        .fn<() => Promise<void>>()
+        .mockResolvedValue();
 
       jest
         .spyOn(AuthService.prototype, 'changePassword')

@@ -13,6 +13,18 @@ export interface JWTPayload {
   exp?: number;
 }
 
+declare module 'fastify' {
+  interface FastifyInstance {
+    authenticate: (
+      request: FastifyRequest,
+      reply: FastifyReply
+    ) => Promise<void>;
+    generateToken: (
+      payload: Pick<JWTPayload, 'userId' | 'tenantId' | 'email'>
+    ) => string;
+  }
+}
+
 export interface AuthenticatedRequest extends FastifyRequest {
   user: JWTPayload;
 }
