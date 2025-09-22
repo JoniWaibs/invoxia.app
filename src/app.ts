@@ -4,6 +4,7 @@ import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { registerAllPlugins } from '@plugins/utils';
 import authRoutes from '@routes/auth';
 import healthRoutes from '@routes/health';
+import tenantRoutes from '@routes/tenant';
 
 dotenv.config();
 
@@ -15,6 +16,10 @@ const appRoutes = [
   {
     prefix: '/api/health',
     route: healthRoutes,
+  },
+  {
+    prefix: '/api/tenant',
+    route: tenantRoutes,
   },
 ];
 

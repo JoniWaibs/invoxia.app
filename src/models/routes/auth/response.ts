@@ -1,19 +1,16 @@
-import { Tenant } from '@models/routes/tenant';
+import { TenantResponse } from '@models/routes/tenant';
 
-export interface User {
+export interface UserResponse {
   id: string;
   email?: string;
   whatsappNumber: string;
-  tenantId: Tenant['id'];
+  tenantId: string;
 }
 
-export interface Auth {
-  user: User;
-  tenant: Tenant;
+export interface AuthResponse {
+  user: UserResponse;
+  tenant: Pick<TenantResponse, 'id' | 'name'>;
   token: string;
 }
 
-export interface Profile {
-  user: Omit<User, 'tenantId'>;
-  tenant: Pick<Tenant, 'id' | 'name'>;
-}
+export type ProfileResponse = Omit<AuthResponse, 'token'>;

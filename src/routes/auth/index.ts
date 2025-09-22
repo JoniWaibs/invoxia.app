@@ -7,15 +7,16 @@ import type {
   SignupRequest,
   SigninRequest,
   ChangePasswordRequest,
-  Auth,
-  Profile,
+  AuthResponse,
+  ProfileResponse,
 } from '@models/routes/auth';
+import { toUserResponse, toBasicTenantResponse } from '@adapters/auth';
 import { BaseApiResponse } from '@models/routes/common';
 
 async function authRoutes(fastify: FastifyInstance) {
   const authService = new AuthService();
 
-  fastify.post<{ Body: SignupRequest; Reply: BaseApiResponse<Auth> }>(
+  fastify.post<{ Body: SignupRequest; Reply: BaseApiResponse<AuthResponse> }>(
     '/signup',
     {
       preHandler: [
@@ -48,23 +49,15 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'User and Firma created successfully',
         data: {
-          user: {
-            id: result.user.id,
-            email: result.user.email || 'unknown',
-            whatsappNumber: result.user.whatsappNumber,
-            tenantId: result.user.tenantId,
-          },
-          tenant: {
-            id: result.tenant.id,
-            name: result.tenant.name,
-          },
+          user: toUserResponse(result.user),
+          tenant: toBasicTenantResponse(result.tenant),
           token,
         },
       });
     }
   );
 
-  fastify.post<{ Body: SigninRequest; Reply: BaseApiResponse<Auth> }>(
+  fastify.post<{ Body: SigninRequest; Reply: BaseApiResponse<AuthResponse> }>(
     '/signin',
     {
       preHandler: [
@@ -85,23 +78,15 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'Login successful',
         data: {
-          user: {
-            id: result.user.id,
-            email: result.user.email || 'unknown',
-            whatsappNumber: result.user.whatsappNumber,
-            tenantId: result.user.tenantId,
-          },
-          tenant: {
-            id: result.tenant.id,
-            name: result.tenant.name,
-          },
+          user: toUserResponse(result.user),
+          tenant: toBasicTenantResponse(result.tenant),
           token,
         },
       });
     }
   );
 
-  fastify.get<{ Reply: BaseApiResponse<Profile> }>(
+  fastify.get<{ Reply: BaseApiResponse<ProfileResponse> }>(
     '/profile',
     {
       preHandler: [fastify.authenticate],
@@ -114,15 +99,8 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'Profile retrieved successfully',
         data: {
-          user: {
-            id: result.user.id,
-            email: result.user.email || 'unknown',
-            whatsappNumber: result.user.whatsappNumber,
-          },
-          tenant: {
-            id: result.tenant.id,
-            name: result.tenant.name,
-          },
+          user: toUserResponse(result.user),
+          tenant: toBasicTenantResponse(result.tenant),
         },
       });
     }

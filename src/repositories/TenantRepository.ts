@@ -13,18 +13,23 @@ export class TenantRepository extends BaseRepository {
     });
   }
 
-  async findById(id: string): Promise<Tenant | null> {
+  async findById(
+    id: string,
+    includeRelations: boolean = false
+  ): Promise<Tenant | null> {
     return this.prisma.tenant.findUnique({
       where: { id },
-      include: {
-        users: true,
-        _count: {
-          select: {
-            users: true,
-            waSessions: true,
+      ...(includeRelations && {
+        include: {
+          users: true,
+          _count: {
+            select: {
+              users: true,
+              waSessions: true,
+            },
           },
         },
-      },
+      }),
     });
   }
 
@@ -39,7 +44,7 @@ export class TenantRepository extends BaseRepository {
     });
   }
 
-  async findManyByUser(userId: string): Promise<Tenant[]> {
+  async findByUser(userId: string): Promise<Tenant[]> {
     return this.prisma.tenant.findMany({
       where: {
         users: {
@@ -77,7 +82,6 @@ export class TenantRepository extends BaseRepository {
     });
   }
 
-  // Check if tenant is properly configured for AFIP operations
   async isAfipConfigured(id: string): Promise<boolean> {
     const tenant = await this.prisma.tenant.findUnique({
       where: { id },

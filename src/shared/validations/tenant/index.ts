@@ -41,12 +41,34 @@ export const updateAfipConditionSchema = z.object({
   condition: afipConditionSchema,
 });
 
+export const updateTenantSchema = z.object({
+  name: tenantNameSchema.optional(),
+  afipCuit: cuitSchema.optional(),
+  afipCondition: afipConditionSchema.optional(),
+  afipPv: puntoVentaSchema.optional(),
+});
+
+export const tenantCredentialsSchema = z.object({
+  certPath: z.string().min(1, 'Certificate path is required'),
+  keyPath: z.string().min(1, 'Key path is required'),
+});
+
 export const tenantValidation = {
   update: {
     schema: {
       body: {
         config: afipConfigSchema,
       },
+    },
+  },
+  updateTenant: {
+    schema: {
+      body: updateTenantSchema,
+    },
+  },
+  credentials: {
+    schema: {
+      body: tenantCredentialsSchema,
     },
   },
   profile: {},

@@ -32,7 +32,8 @@
       "@shared/*": ["src/shared/*"],
       "@repositories/*": ["src/repositories/*"],
       "@services/*": ["src/services/*"],
-      "@routes/*": ["src/routes/*"]
+      "@routes/*": ["src/routes/*"],
+      "@adapters/*": ["src/adapters/*"]
     }
   },
   "include": [
