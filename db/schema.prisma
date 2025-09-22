@@ -69,15 +69,6 @@ model WhatsAppIncoming {
   @@map("wa_incoming")
 }
 
-model health {
-  id        Int      @id @default(autoincrement())
-  status    String   @default("ok")
-  message   String?
-  timestamp DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-}
-
 enum UserRole {
   ADMIN
   USER

@@ -9,16 +9,6 @@ import {
 } from '@shared/errors';
 import type { User, Tenant } from '@prisma/client';
 
-export interface SignupResult {
-  user: User;
-  tenant: Tenant;
-}
-
-export interface AuthenticatedUser {
-  user: User;
-  tenant: Tenant;
-}
-
 export class AuthService extends BaseService {
   private tenantRepo: TenantRepository;
   private userRepo: UserRepository;
@@ -35,7 +25,7 @@ export class AuthService extends BaseService {
     newTenantName?: string;
     existingTenantName?: string;
     whatsappNumber?: string;
-  }): Promise<SignupResult> {
+  }): Promise<{ user: User; tenant: Tenant }> {
     const shouldCreateTenant = !!data.newTenantName;
     const tenantName = data.newTenantName || data.existingTenantName!;
 
@@ -46,9 +36,7 @@ export class AuthService extends BaseService {
     }
 
     if (!shouldCreateTenant && !existingTenant) {
-      throw new NotFoundError(
-        `Firma ${tenantName} not found, you should create one`
-      );
+      throw new NotFoundError(`Firma ${tenantName}`);
     }
 
     if (data.email) {
@@ -105,7 +93,7 @@ export class AuthService extends BaseService {
   async signin(
     identifier: string,
     password: string
-  ): Promise<AuthenticatedUser> {
+  ): Promise<{ user: User; tenant: Tenant }> {
     let user = await this.userRepo.findByEmail(identifier);
 
     if (!user) {
@@ -127,7 +115,7 @@ export class AuthService extends BaseService {
 
     return {
       user: user as User,
-      tenant: (user as unknown as AuthenticatedUser).tenant,
+      tenant: (user as any).tenant,
     };
   }
 
@@ -149,7 +137,7 @@ export class AuthService extends BaseService {
     return this.userRepo.linkWhatsApp(userId, whatsappNumber);
   }
 
-  async getUserById(id: string): Promise<AuthenticatedUser> {
+  async getUserById(id: string): Promise<{ user: User; tenant: Tenant }> {
     const user = await this.userRepo.findById(id);
     if (!user) {
       throw new NotFoundError('User', id);
@@ -157,7 +145,7 @@ export class AuthService extends BaseService {
 
     return {
       user: user as User,
-      tenant: (user as unknown as AuthenticatedUser).tenant,
+      tenant: (user as any).tenant,
     };
   }
 

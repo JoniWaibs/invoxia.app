@@ -5,6 +5,8 @@ export default {
   moduleNameMapper: {
     '^@plugins/(.*)\\.js$': '<rootDir>/src/plugins/$1',
     '^@plugins/(.*)$': '<rootDir>/src/plugins/$1',
+    '^@adapters/(.*)\\.js$': '<rootDir>/src/adapters/$1',
+    '^@adapters/(.*)$': '<rootDir>/src/adapters/$1',
     '^@models/(.*)\\.js$': '<rootDir>/src/models/$1',
     '^@models/(.*)$': '<rootDir>/src/models/$1',
     '^@shared/(.*)\\.js$': '<rootDir>/src/shared/$1',

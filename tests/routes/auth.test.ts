@@ -1,11 +1,8 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import request from 'supertest';
 import buildApp from '../../src/app';
-import {
-  AuthService,
-  type SignupResult,
-  type AuthenticatedUser,
-} from '@services/AuthService';
+import { AuthService } from '../../src/services';
+import type { User, Tenant } from '@prisma/client';
 import { mockUser, mockTenant } from '../mocks/auth.data';
 
 describe('api/auth route', () => {
@@ -85,7 +82,7 @@ describe('api/auth route', () => {
         await app.ready();
 
         const mockSignup = jest
-          .fn<() => Promise<SignupResult>>()
+          .fn<() => Promise<{ user: User; tenant: Tenant }>>()
           .mockResolvedValue({
             user: mockUser[0]!,
             tenant: mockTenant,
@@ -128,7 +125,7 @@ describe('api/auth route', () => {
         await app.ready();
 
         const mockSignup = jest
-          .fn<() => Promise<SignupResult>>()
+          .fn<() => Promise<{ user: User; tenant: Tenant }>>()
           .mockResolvedValue({
             user: mockUser[1]!,
             tenant: mockTenant,
@@ -191,7 +188,7 @@ describe('api/auth route', () => {
       await app.ready();
 
       const mockSignin = jest
-        .fn<() => Promise<AuthenticatedUser>>()
+        .fn<() => Promise<{ user: User; tenant: Tenant }>>()
         .mockResolvedValue({
           user: mockUser[0]!,
           tenant: mockTenant,
@@ -227,7 +224,7 @@ describe('api/auth route', () => {
       await app.ready();
 
       const mockSignin = jest
-        .fn<() => Promise<AuthenticatedUser>>()
+        .fn<() => Promise<{ user: User; tenant: Tenant }>>()
         .mockResolvedValue({
           user: mockUser[0]!,
           tenant: mockTenant,
@@ -261,7 +258,7 @@ describe('api/auth route', () => {
       await app.ready();
 
       const mockSignin = jest
-        .fn<() => Promise<AuthenticatedUser>>()
+        .fn<() => Promise<{ user: User; tenant: Tenant }>>()
         .mockRejectedValue({
           name: 'AuthenticationError',
           message: 'Invalid credentials',
@@ -292,7 +289,7 @@ describe('api/auth route', () => {
       await app.ready();
 
       const mockGetUserProfile = jest
-        .fn<() => Promise<AuthenticatedUser>>()
+        .fn<() => Promise<{ user: User; tenant: Tenant }>>()
         .mockResolvedValue({
           user: mockUser[0]!,
           tenant: mockTenant,

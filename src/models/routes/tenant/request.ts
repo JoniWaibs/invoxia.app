@@ -1,4 +1,9 @@
 import { z } from 'zod';
-import { afipConfigSchema } from '@shared/validations/tenant';
+import {
+  updateTenantSchema,
+  tenantCredentialsSchema,
+} from '@shared/validations/tenant';
 
-export type UpdateRequest = z.infer<typeof afipConfigSchema>;
+export type UpdateTenantRequest = z.infer<typeof updateTenantSchema>;
+
+export type TenantCredentialsRequest = z.infer<typeof tenantCredentialsSchema>;

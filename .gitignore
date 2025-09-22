@@ -25,6 +25,9 @@ lerna-debug.log*
 # guides
 GUIDES.md
 
+# prompts
+prompts/
+
 # Runtime data
 pids
 *.pid
