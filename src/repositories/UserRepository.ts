@@ -1,5 +1,7 @@
-import type { User, UserRole } from '@prisma/client';
+import type { Tenant, User, UserRole } from '@prisma/client';
 import { BaseRepository } from './BaseRepository';
+
+type UserWithTenant = User & { tenant: Tenant };
 
 export class UserRepository extends BaseRepository {
   async create(data: {
@@ -8,7 +10,7 @@ export class UserRepository extends BaseRepository {
     whatsappNumber: string;
     role: UserRole;
     tenantId: string;
-  }): Promise<User> {
+  }): Promise<UserWithTenant> {
     return this.prisma.user.create({
       data,
       include: {
@@ -17,7 +19,7 @@ export class UserRepository extends BaseRepository {
     });
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<UserWithTenant | null> {
     return this.prisma.user.findUnique({
       where: { id },
       include: {
@@ -26,7 +28,7 @@ export class UserRepository extends BaseRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserWithTenant | null> {
     return this.prisma.user.findUnique({
       where: { email },
       include: {
@@ -38,7 +40,7 @@ export class UserRepository extends BaseRepository {
   async findByWhatsApp(
     whatsappNumber: string,
     tenantId?: string
-  ): Promise<User | null> {
+  ): Promise<UserWithTenant | null> {
     if (tenantId) {
       return this.prisma.user.findFirst({
         where: {
@@ -65,7 +67,7 @@ export class UserRepository extends BaseRepository {
   async findByWhatsAppAndTenant(
     whatsappNumber: string,
     tenantId: string
-  ): Promise<User | null> {
+  ): Promise<UserWithTenant | null> {
     return this.prisma.user.findFirst({
       where: {
         whatsappNumber,
@@ -78,7 +80,9 @@ export class UserRepository extends BaseRepository {
   }
 
   // Find all tenants that a WhatsApp number belongs to
-  async findTenantsByWhatsApp(whatsappNumber: string): Promise<User[]> {
+  async findTenantsByWhatsApp(
+    whatsappNumber: string
+  ): Promise<UserWithTenant[]> {
     return this.prisma.user.findMany({
       where: {
         whatsappNumber,
@@ -100,7 +104,7 @@ export class UserRepository extends BaseRepository {
       whatsappNumber: string;
       role: UserRole;
     }>
-  ): Promise<User> {
+  ): Promise<UserWithTenant> {
     return this.prisma.user.update({
       where: { id },
       data,
@@ -110,7 +114,10 @@ export class UserRepository extends BaseRepository {
     });
   }
 
-  async updatePassword(id: string, hashedPassword: string): Promise<User> {
+  async updatePassword(
+    id: string,
+    hashedPassword: string
+  ): Promise<UserWithTenant> {
     return this.prisma.user.update({
       where: { id },
       data: { password: hashedPassword },
@@ -120,7 +127,10 @@ export class UserRepository extends BaseRepository {
     });
   }
 
-  async linkWhatsApp(userId: string, whatsappNumber: string): Promise<User> {
+  async linkWhatsApp(
+    userId: string,
+    whatsappNumber: string
+  ): Promise<UserWithTenant> {
     return this.prisma.user.update({
       where: { id: userId },
       data: { whatsappNumber },

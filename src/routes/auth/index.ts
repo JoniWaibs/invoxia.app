@@ -8,15 +8,16 @@ import type {
   SigninRequest,
   ChangePasswordRequest,
   AuthResponse,
-  ProfileResponse,
 } from '@models/routes/auth';
-import { toUserResponse, toBasicTenantResponse } from '@adapters/auth';
 import { BaseApiResponse } from '@models/routes/common';
 
 async function authRoutes(fastify: FastifyInstance) {
   const authService = new AuthService();
 
-  fastify.post<{ Body: SignupRequest; Reply: BaseApiResponse<AuthResponse> }>(
+  fastify.post<{
+    Body: SignupRequest;
+    Reply: BaseApiResponse<AuthResponse & { token: string }>;
+  }>(
     '/signup',
     {
       preHandler: [
@@ -49,15 +50,18 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'User and Firma created successfully',
         data: {
-          user: toUserResponse(result.user),
-          tenant: toBasicTenantResponse(result.tenant),
+          user: result.user,
+          tenant: result.tenant,
           token,
         },
       });
     }
   );
 
-  fastify.post<{ Body: SigninRequest; Reply: BaseApiResponse<AuthResponse> }>(
+  fastify.post<{
+    Body: SigninRequest;
+    Reply: BaseApiResponse<AuthResponse & { token: string }>;
+  }>(
     '/signin',
     {
       preHandler: [
@@ -78,15 +82,15 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'Login successful',
         data: {
-          user: toUserResponse(result.user),
-          tenant: toBasicTenantResponse(result.tenant),
+          user: result.user,
+          tenant: result.tenant,
           token,
         },
       });
     }
   );
 
-  fastify.get<{ Reply: BaseApiResponse<ProfileResponse> }>(
+  fastify.get<{ Reply: BaseApiResponse<AuthResponse> }>(
     '/profile',
     {
       preHandler: [fastify.authenticate],
@@ -99,8 +103,8 @@ async function authRoutes(fastify: FastifyInstance) {
       return reply.send({
         message: 'Profile retrieved successfully',
         data: {
-          user: toUserResponse(result.user),
-          tenant: toBasicTenantResponse(result.tenant),
+          user: result.user,
+          tenant: result.tenant,
         },
       });
     }

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { registerAllPlugins } from '@plugins/utils';
 import authRoutes from '@routes/auth';
+import contactRoutes from '@routes/contact';
 import healthRoutes from '@routes/health';
 import tenantRoutes from '@routes/tenant';
 
@@ -12,6 +13,10 @@ const appRoutes = [
   {
     prefix: '/api/auth',
     route: authRoutes,
+  },
+  {
+    prefix: '/api/contacts',
+    route: contactRoutes,
   },
   {
     prefix: '/api/health',
