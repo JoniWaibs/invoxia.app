@@ -22,7 +22,6 @@ export class ContactService extends BaseService {
     tenantId: string,
     data: CreateContactRequest
   ): Promise<ContactResponse> {
-
     const existingContact = await this.contactRepo.findByDocument(
       tenantId,
       data.docType,
@@ -34,7 +33,6 @@ export class ContactService extends BaseService {
         `Contact with ${data.docType} ${data.docNumber} already exists`
       );
     }
-
 
     this.validateContactData(data);
 
@@ -153,8 +151,10 @@ export class ContactService extends BaseService {
     if (data.docType !== undefined) updateData.docType = data.docType;
     if (data.docNumber !== undefined) updateData.docNumber = data.docNumber;
     if (data.email !== undefined) updateData.email = data.email ?? null;
-    if (data.whatsapp !== undefined) updateData.whatsapp = data.whatsapp ?? null;
-    if (data.ivaCondition !== undefined) updateData.ivaCondition = data.ivaCondition ?? null;
+    if (data.whatsapp !== undefined)
+      updateData.whatsapp = data.whatsapp ?? null;
+    if (data.ivaCondition !== undefined)
+      updateData.ivaCondition = data.ivaCondition ?? null;
     if (data.address !== undefined) updateData.address = data.address ?? null;
 
     const updatedContact = await this.contactRepo.update(
@@ -182,7 +182,9 @@ export class ContactService extends BaseService {
     return this.contactRepo.countByTenant(tenantId);
   }
 
-  private validateContactData(data: Partial<CreateContactRequest | UpdateContactRequest>): void {
+  private validateContactData(
+    data: Partial<CreateContactRequest | UpdateContactRequest>
+  ): void {
     if (!data.email && !data.whatsapp) {
       throw new ValidationError(
         'At least one contact method (email or WhatsApp) is required'
