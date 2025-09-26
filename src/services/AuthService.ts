@@ -7,7 +7,9 @@ import {
   ConflictError,
   NotFoundError,
 } from '@shared/errors';
-import type { User, Tenant } from '@prisma/client';
+import type { Tenant } from '@prisma/client';
+import { AuthResponse } from '@models/routes/auth';
+import { toBasicTenantResponse, toUserResponse } from '@adapters/auth';
 
 export class AuthService extends BaseService {
   private tenantRepo: TenantRepository;
@@ -25,7 +27,7 @@ export class AuthService extends BaseService {
     newTenantName?: string;
     existingTenantName?: string;
     whatsappNumber?: string;
-  }): Promise<{ user: User; tenant: Tenant }> {
+  }): Promise<AuthResponse> {
     const shouldCreateTenant = !!data.newTenantName;
     const tenantName = data.newTenantName || data.existingTenantName!;
 
@@ -86,14 +88,14 @@ export class AuthService extends BaseService {
         },
       });
 
-      return { user, tenant };
+      return {
+        user: toUserResponse(user),
+        tenant: toBasicTenantResponse(user.tenant),
+      };
     });
   }
 
-  async signin(
-    identifier: string,
-    password: string
-  ): Promise<{ user: User; tenant: Tenant }> {
+  async signin(identifier: string, password: string): Promise<AuthResponse> {
     let user = await this.userRepo.findByEmail(identifier);
 
     if (!user) {
@@ -114,12 +116,15 @@ export class AuthService extends BaseService {
     }
 
     return {
-      user: user as User,
-      tenant: (user as any).tenant,
+      user: toUserResponse(user),
+      tenant: toBasicTenantResponse(user.tenant),
     };
   }
 
-  async linkWhatsApp(userId: string, whatsappNumber: string): Promise<User> {
+  async linkWhatsApp(
+    userId: string,
+    whatsappNumber: string
+  ): Promise<AuthResponse> {
     const user = await this.userRepo.findById(userId);
     if (!user) {
       throw new NotFoundError('User', userId);
@@ -134,18 +139,21 @@ export class AuthService extends BaseService {
       throw new ConflictError('WhatsApp number already in use in this Firma');
     }
 
-    return this.userRepo.linkWhatsApp(userId, whatsappNumber);
+    return {
+      user: toUserResponse(user),
+      tenant: toBasicTenantResponse(user.tenant),
+    };
   }
 
-  async getUserById(id: string): Promise<{ user: User; tenant: Tenant }> {
+  async getUserById(id: string): Promise<AuthResponse> {
     const user = await this.userRepo.findById(id);
     if (!user) {
       throw new NotFoundError('User', id);
     }
 
     return {
-      user: user as User,
-      tenant: (user as any).tenant,
+      user: toUserResponse(user),
+      tenant: toBasicTenantResponse(user.tenant),
     };
   }
 

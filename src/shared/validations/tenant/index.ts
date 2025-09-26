@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   cuitSchema,
+  ivaConditionSchema,
   puntoVentaSchema,
   tenantNameSchema,
 } from '@shared/validations/common';
@@ -15,16 +16,10 @@ export const updateTenantNameSchema = z.object({
   name: tenantNameSchema,
 });
 
-export const afipConditionSchema = z.enum([
-  'MONOTRIBUTO',
-  'RESPONSABLE_INSCRIPTO',
-  'EXENTO',
-]);
-
 export const afipConfigSchema = z.object({
   cuit: cuitSchema.optional(),
   puntoVenta: puntoVentaSchema.optional(),
-  condition: afipConditionSchema.optional(),
+  condition: ivaConditionSchema.optional(),
   certificatePath: z.string().optional(),
   keyPath: z.string().optional(),
 });
@@ -38,13 +33,13 @@ export const updateAfipPuntoVentaSchema = z.object({
 });
 
 export const updateAfipConditionSchema = z.object({
-  condition: afipConditionSchema,
+  condition: ivaConditionSchema,
 });
 
 export const updateTenantSchema = z.object({
   name: tenantNameSchema.optional(),
   afipCuit: cuitSchema.optional(),
-  afipCondition: afipConditionSchema.optional(),
+  afipCondition: ivaConditionSchema.optional(),
   afipPv: puntoVentaSchema.optional(),
 });
 

@@ -2,7 +2,7 @@ import { TenantResponse } from '@models/routes/tenant';
 
 export interface UserResponse {
   id: string;
-  email?: string;
+  email?: string | null;
   whatsappNumber: string;
   tenantId: string;
 }
@@ -10,7 +10,4 @@ export interface UserResponse {
 export interface AuthResponse {
   user: UserResponse;
   tenant: Pick<TenantResponse, 'id' | 'name'>;
-  token: string;
 }
-
-export type ProfileResponse = Omit<AuthResponse, 'token'>;

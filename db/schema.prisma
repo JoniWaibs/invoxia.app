@@ -18,6 +18,7 @@ model Tenant {
   afipCertPath  String?
   afipKeyPath   String?
   users         User[]
+  contacts      Contact[]
   waIncoming    WhatsAppIncoming[]
   waSessions    WhatsAppSession[]
 
@@ -67,6 +68,30 @@ model WhatsAppIncoming {
   user      User?    @relation(fields: [userId], references: [id])
 
   @@map("wa_incoming")
+}
+
+model Contact {
+  id           String          @id @default(uuid())
+  tenantId     String
+  fullName     String
+  docType      DocumentType
+  docNumber    String
+  email        String?
+  whatsapp     String?
+  ivaCondition AFIPCondition?
+  address      String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  tenant       Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, docType, docNumber])
+  @@map("contacts")
+}
+
+enum DocumentType {
+  DNI
+  CUIT
+  CUIL
 }
 
 enum UserRole {
